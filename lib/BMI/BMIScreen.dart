@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:untitled/BMI/BMIResult.dart';
 
 class BMIScreen extends StatefulWidget {
   const BMIScreen({Key? key}) : super(key: key);
@@ -282,7 +285,19 @@ class _BMIScreenState extends State<BMIScreen> {
 
             ),
             child: MaterialButton(
-                onPressed: (){},
+                onPressed: (){
+                  var result = weight / pow(height/100,2);
+                  print(result);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_)=> BMIResult(
+                        result: result,
+                        isMale: isMale,
+                        age: age,
+
+                      ))
+                  );
+                },
               child: const Text(
                 'Calculate',
                 style: TextStyle(

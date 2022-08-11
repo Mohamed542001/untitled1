@@ -30,38 +30,38 @@ class UserScreen extends StatelessWidget {
     ),
     UserModel(
         id: 4,
-        name: 'mohamed',
-        phone: '132456'
+        name: 'islam',
+        phone: '15156'
     ),
     UserModel(
         id: 5,
-        name: 'mohamed',
-        phone: '132456'
+        name: 'kamal',
+        phone: '8981891'
     ),
     UserModel(
         id: 6,
-        name: 'mohamed',
-        phone: '132456'
+        name: 'shahd',
+        phone: '51980890'
     ),
     UserModel(
         id: 7,
-        name: 'mohamed',
-        phone: '132456'
+        name: 'mariam',
+        phone: '871879'
     ),
     UserModel(
         id: 8,
-        name: 'mohamed',
-        phone: '132456'
+        name: 'nada',
+        phone: '20984980'
     ),
     UserModel(
         id: 9,
-        name: 'mohamed',
-        phone: '132456'
+        name: 'esraa',
+        phone: '89891919'
     ),
     UserModel(
         id: 10,
-        name: 'mohamed',
-        phone: '132456'
+        name: 'basma',
+        phone: '132454586'
     ),
 
   ];
