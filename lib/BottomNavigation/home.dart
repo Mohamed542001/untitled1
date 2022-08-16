@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/BottomNavigation/ArchivedScreen.dart';
 import 'package:untitled/BottomNavigation/DoneScreen.dart';
 import 'package:untitled/BottomNavigation/TaskScreen.dart';
+import 'package:untitled/dio/apiProvider.dart';
+import 'package:untitled/models/SuccessModel.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -12,18 +15,51 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  int index=0;
+  SuccessModel? successModel;
+  getData() async{
+    successModel = await ApiProvider().getSuccessStories();
+    setState(() {
+      isLoading = false;
+    });
+    print(successModel?.model![0].title);
+  }
 
+
+
+
+  int index=0;
+  bool? isLoading=true;
   List screens = [
     const TaskScreen(),
     const DoneScreen(),
     const ArchivedScreen()
   ];
 
+  createSharedPreferences() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    sharedPreferences.setInt('id', 4);
+    sharedPreferences.setString('name', 'Mohamed');
+
+    int? id = sharedPreferences.getInt('id');
+    String? name = sharedPreferences.getString('name');
+
+    print(id);
+    print(name);
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+    createSharedPreferences();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.red,
         title: const Text(
           'Task App'
         ),
@@ -55,6 +91,9 @@ class _HomeState extends State<Home> {
         ],
       ),
       body: screens[index],
+      // body: isLoading!
+      //     ?CircularProgressIndicator()
+      // :Image.network(successModel!.model![0].image!),
     );
   }
 }

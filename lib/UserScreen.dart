@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/dio/apiProvider.dart';
+import 'package:untitled/models/SuccessModel.dart';
 
 class UserModel {
   UserModel({required this.id, required this.name, required this.phone});
@@ -10,8 +12,14 @@ class UserModel {
 }
 
 
-class UserScreen extends StatelessWidget {
+class UserScreen extends StatefulWidget {
+  const UserScreen({Key? key}) : super(key: key);
 
+  @override
+  State<UserScreen> createState() => _UserScreenState();
+}
+
+class _UserScreenState extends State<UserScreen> {
   List<UserModel> userModel = [
     UserModel(
         id: 1,
@@ -66,55 +74,78 @@ class UserScreen extends StatelessWidget {
 
   ];
 
+  SuccessModel? successModel;
+  getData() async{
+    successModel = await ApiProvider().getSuccessStories();
+    setState(() {
+      isLoading = false;
+    });
+    print(successModel?.model![0].id);
+  }
+
+
+  bool? isLoading = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mohamed'),
       ),
-      body: ListView.separated(
+      body:isLoading!? CircularProgressIndicator():ListView.separated(
         itemCount: userModel.length,
         separatorBuilder: (context,index)=>const Divider(),
-          itemBuilder: (context,i)=>Padding(
-            padding: const EdgeInsets.all(15),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 25,
-                  backgroundColor: Colors.blue,
-                  child: Text(
-                    '${userModel[i].id}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 25,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      userModel[i].name,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                      ),
-                    ),
-                    Text(
-                      userModel[i].phone,
-                      style: const TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
+          itemBuilder: (context,i)=>buildUserItem(successModel!.model![i]),
       ),
     );
   }
 }
+
+Widget buildUserItem(Model success)=>Padding(
+  padding: const EdgeInsets.all(15),
+  child: Row(
+    children: [
+      CircleAvatar(
+        radius: 25,
+        backgroundColor: Colors.blue,
+        child: Text(
+          '${success.id}',
+          style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25
+          ),
+        ),
+      ),
+      const SizedBox(
+        width: 25,
+      ),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            success.title!,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+          // Text(
+          //   userModel[index].phone,
+          //   style: const TextStyle(
+          //     fontSize: 20,
+          //   ),
+          // ),
+        ],
+      )
+    ],
+  ),
+);
